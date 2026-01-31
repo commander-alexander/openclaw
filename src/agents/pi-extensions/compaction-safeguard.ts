@@ -210,6 +210,16 @@ export default function compactionSafeguardExtension(api: ExtensionAPI): void {
       const maxChunkTokens = Math.max(1, Math.floor(contextWindowTokens * adaptiveRatio));
       const reserveTokens = Math.max(1, Math.floor(preparation.settings.reserveTokens));
 
+      console.log(
+        `[compaction-debug] Starting summarization: ` +
+          `tokensBefore=${tokensBefore}, ` +
+          `contextWindow=${contextWindowTokens}, ` +
+          `reserveTokens=${reserveTokens}, ` +
+          `maxChunkTokens=${maxChunkTokens}, ` +
+          `messagesToSummarize=${messagesToSummarize.length}, ` +
+          `turnPrefixMessages=${turnPrefixMessages.length}`,
+      );
+
       const historySummary = await summarizeInStages({
         messages: messagesToSummarize,
         model,
@@ -250,11 +260,15 @@ export default function compactionSafeguardExtension(api: ExtensionAPI): void {
         },
       };
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.warn(`[compaction-debug] Summarization FAILED: ${errorMessage}`);
       console.warn(
-        `Compaction summarization failed; truncating history: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
+        `[compaction-debug] Failure context: ` +
+          `tokensBefore=${preparation.tokensBefore}, ` +
+          `reserveTokens=${preparation.settings.reserveTokens}, ` +
+          `messagesToSummarize=${preparation.messagesToSummarize.length}`,
       );
+      console.warn(`Compaction summarization failed; truncating history: ${errorMessage}`);
       return {
         compaction: {
           summary: fallbackSummary,

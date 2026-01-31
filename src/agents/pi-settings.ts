@@ -14,6 +14,10 @@ export function ensurePiCompactionReserveTokens(params: {
   const minReserveTokens = params.minReserveTokens ?? DEFAULT_PI_COMPACTION_RESERVE_TOKENS_FLOOR;
   const current = params.settingsManager.getCompactionReserveTokens();
 
+  console.log(
+    `[compaction-debug] Pi reserveTokens: current=${current}, floor=${minReserveTokens}, willOverride=${current < minReserveTokens}`,
+  );
+
   if (current >= minReserveTokens) {
     return { didOverride: false, reserveTokens: current };
   }
@@ -21,6 +25,8 @@ export function ensurePiCompactionReserveTokens(params: {
   params.settingsManager.applyOverrides({
     compaction: { reserveTokens: minReserveTokens },
   });
+
+  console.log(`[compaction-debug] Applied override: reserveTokens=${minReserveTokens}`);
 
   return { didOverride: true, reserveTokens: minReserveTokens };
 }

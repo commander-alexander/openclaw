@@ -1,5 +1,5 @@
 {
-  "name": "clawdbot",
+  "name": "openclaw",
   "version": "2026.1.25",
   "description": "WhatsApp gateway CLI (Baileys web) with Pi RPC agent",
   "type": "module",
@@ -10,7 +10,8 @@
     "./plugin-sdk/*": "./dist/plugin-sdk/*"
   },
   "bin": {
-    "clawdbot": "dist/entry.js"
+    "clawdbot": "dist/entry.js",
+    "openclaw": "dist/entry.js"
   },
   "files": [
     "dist/acp/**",
@@ -220,7 +221,7 @@
     "@types/proper-lockfile": "^4.1.4",
     "@types/qrcode-terminal": "^0.12.2",
     "@types/ws": "^8.18.1",
-    "@typescript/native-preview": "7.0.0-dev.20260125.1",
+    "@typescript/native-preview": "7.0.0-dev.20260130.1",
     "@vitest/coverage-v8": "^4.0.18",
     "docx-preview": "^0.3.7",
     "lit": "^3.3.2",
